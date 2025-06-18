@@ -74,7 +74,10 @@ const FileUploadArea = () => {
     <div
       className={`${classes.uploadContainer} ${
         isDragging ? classes.dragover : ""
-      }`}
+      }  ${
+        error ? classes.error : ""
+      }
+      `}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
