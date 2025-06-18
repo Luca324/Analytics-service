@@ -2,10 +2,9 @@ import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 import clear from "../../assets/clear.svg";
 
-const FileUploadArea = () => {
+const FileUploadArea = ({isUploaded, setIsUploaded, uploadedFile, setUploadedFile}) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [isUploaded, setIsUploaded] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState(null);
+ 
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -100,7 +99,7 @@ const FileUploadArea = () => {
           </button>
         </div>
       )}
-
+<div>is uploaded: {Boolean(isUploaded)}</div>
       {isUploaded ? (
         <div className={classes.uploadedWrapper}>
           <div className={classes.uploaded}>{uploadedFile.name}</div>
