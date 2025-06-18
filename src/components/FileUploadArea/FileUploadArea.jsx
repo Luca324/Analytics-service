@@ -1,12 +1,13 @@
-import classes from './FileUploadArea.module.css';
-import { useCallback, useState, useRef } from 'react';
+import classes from "./FileUploadArea.module.css";
+import { useCallback, useState, useRef } from "react";
 
-import loading from "../../assets/loading.svg"
+import loading from "../../assets/loading.svg";
+import clear from "../../assets/clear.svg";
 
 const FileUploadArea = () => {
   const [isDragging, setIsDragging] = useState(false);
-  const [isUploaded, setIsUploaded] = useState(false)
-  const [uploadedFile, setUploadedFile] = useState(null)
+  const [isUploaded, setIsUploaded] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleDragEnter = useCallback((e) => {
@@ -24,34 +25,47 @@ const FileUploadArea = () => {
   }, []);
 
   const handleDrop = useCallback((e) => {
+    console.log("drop");
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const files = e.dataTransfer.files;
-      setUploadedFile(files[0])
-      setIsUploaded(true)
-      console.log('uploadedFile:', uploadedFile);
-      // Здесь можно обработать файлы
+      const file = e.dataTransfer.files[0];
+      [0];
+      processFile(file);
     }
   }, []);
 
   const handleFileInputChange = useCallback((e) => {
+    console.log("file input change");
+
     if (e.target.files && e.target.files.length > 0) {
-      const files = e.target.files;
-      setUploadedFile(files[0])
-      console.log('uploadedFile:', uploadedFile);
-      // Здесь можно обработать файлы
+      const file = e.target.files[0];
+      processFile(file);
     }
   }, []);
+
+  const processFile = (file) => {
+    setIsUploaded(true);
+    setUploadedFile(file);
+    console.log("new file:", file.name);
+  };
 
   const handleButtonClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
 
+  const clearFile = () => {
+    console.log("clearing..");
+    setIsUploaded(false);
+    setUploadedFile(null);
+  };
+
   return (
     <div
-      className={`${classes.uploadContainer} ${isDragging ? classes.dragover : ''}`}
+      className={`${classes.uploadContainer} ${
+        isDragging ? classes.dragover : ""
+      }`}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
@@ -62,14 +76,22 @@ const FileUploadArea = () => {
         ref={fileInputRef}
         onChange={handleFileInputChange}
         className={classes.fileInput}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
       />
-      <button className={classes.uploadButton} onClick={handleButtonClick}>
+      
+      {isUploaded ? (
+        <div className={classes.uploadedWrapper}>
+          <div className={classes.uploaded}>{uploadedFile.name}</div>
+          <button className={classes.clear} onClick={clearFile}>
+            <img src={clear} />
+          </button>
+        </div>
+      ) : (
+        <button className={classes.uploadButton} onClick={handleButtonClick}>
         Загрузите файл
       </button>
-      {isUploaded ? <div className={classes.uploaded}>{}</div> : ''}
-      {isDragging ? <div className={classes.loading}><img src={loading} /></div> : ''}
-      <div className={classes.uploadText}>или перетащите сюда</div>
+      )}
+      <span>или перетащите сюда</span>
     </div>
   );
 };

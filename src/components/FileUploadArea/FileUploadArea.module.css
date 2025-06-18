@@ -1,14 +1,18 @@
 .uploadContainer {
-  border: 2px dashed #ccc;
-  border-radius: 8px;
   padding: 20px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #EACDFF;
   transition: all 0.3s ease;
 }
+.uploadContainer, .uploadButton, .loading, .uploaded {
+  border-radius: 8px;
 
+}
 .dragover {
-  border-color: #4CAF50;
-  background-color: #f0fff0;
+  background-color: #D4FAE6;
 }
 
 .fileInput {
@@ -30,13 +34,21 @@
   background-color: #45a049;
 }
 
-.uploadText {
-  color: #666;
-  font-size: 14px;
+.uploadedWrapper {
+    display: flex;
+    height: 30px;
+    column-gap: 4px;
 }
-
 .loading, .uploaded {
-    width: 200px;
     background-color: #CB81FF;
 }
+ .loading {
+    width: 200px;
+}
 
+.clear {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
