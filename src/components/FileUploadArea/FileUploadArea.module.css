@@ -1,0 +1,42 @@
+.uploadContainer {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.dragover {
+  border-color: #4CAF50;
+  background-color: #f0fff0;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.uploadButton:hover {
+  background-color: #45a049;
+}
+
+.uploadText {
+  color: #666;
+  font-size: 14px;
+}
+
+.loading, .uploaded {
+    width: 200px;
+    background-color: #CB81FF;
+}
+
