@@ -1,59 +1,68 @@
 import classes from "./FileUploadArea.module.css";
-import { useCallback, useState, useRef } from "react";
-
-import loading from "../../assets/loading.svg";
+import { useState, useRef } from "react";
 import clear from "../../assets/clear.svg";
 
 const FileUploadArea = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
+  const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
-  const handleDragEnter = useCallback((e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  }, []);
+  // Проверка файла перед обработкой
 
-  const handleDragLeave = useCallback((e) => {
+
+  const handleDrop = (e) => {
     e.preventDefault();
     setIsDragging(false);
-  }, []);
+    setError(null);
 
-  const handleDragOver = useCallback((e) => {
-    e.preventDefault();
-  }, []);
-
-  const handleDrop = useCallback((e) => {
-    console.log("drop");
-    e.preventDefault();
-    setIsDragging(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      const file = e.dataTransfer.files[0];
-      [0];
-      processFile(file);
+    try {
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        processFile(file);
+      }
+    } catch (err) {
+      setError(err.message);
     }
-  }, []);
+  };
 
-  const handleFileInputChange = useCallback((e) => {
-    console.log("file input change");
+  const handleFileInputChange = (e) => {
+    setError(null);
 
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      processFile(file);
+    try {
+      if (e.target.files && e.target.files.length > 0) {
+        const file = e.target.files[0];
+        processFile(file);
+      }
+    } catch (err) {
+      setError(err.message);
     }
-  }, []);
+  };
 
   const processFile = (file) => {
     setIsUploaded(true);
     setUploadedFile(file);
-    console.log("new file:", file.name);
+    console.log("Файл успешно загружен:", file.name);
   };
 
-  const handleButtonClick = useCallback(() => {
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleButtonClick = () => {
     fileInputRef.current?.click();
-  }, []);
+  };
 
   const clearFile = () => {
     console.log("clearing..");
@@ -73,25 +82,42 @@ const FileUploadArea = () => {
     >
       <input
         type="file"
+        accept=".csv"
         ref={fileInputRef}
         onChange={handleFileInputChange}
         className={classes.fileInput}
         style={{ display: "none" }}
       />
-      
+
+      {error && (
+        <div className={classes.error}>
+          {error}
+          <button onClick={() => setError(null)} className={classes.errorClose}>
+            ×
+          </button>
+        </div>
+      )}
+
       {isUploaded ? (
         <div className={classes.uploadedWrapper}>
           <div className={classes.uploaded}>{uploadedFile.name}</div>
           <button className={classes.clear} onClick={clearFile}>
-            <img src={clear} />
+            <img src={clear} alt="Очистить" />
           </button>
         </div>
       ) : (
         <button className={classes.uploadButton} onClick={handleButtonClick}>
-        Загрузите файл
-      </button>
+          Загрузите файл
+        </button>
       )}
+      {error ?
+      <span className={classes.error}>упс, не то...</span>
+      :
+      isUploaded ?
+      <span>файл загружен!</span>
+      :
       <span>или перетащите сюда</span>
+}
     </div>
   );
 };
