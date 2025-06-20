@@ -14,7 +14,7 @@ function Uploader() {
         uploadedFile={uploadedFile}
         setUploadedFile={setUploadedFile}
         />
-        <button>Send</button>
+        <button className={classes.send}>Отправить</button>
     </div> );
 }
 

@@ -1,6 +1,6 @@
+import DoneBlock from "../DoneBlock/DoneBlock";
 import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
-import clear from "../../assets/clear.svg";
 
 const FileUploadArea = (props) => {
   const {isUploaded, setIsUploaded, uploadedFile, setUploadedFile} = props
@@ -28,7 +28,8 @@ const FileUploadArea = (props) => {
   };
 
   const handleFileInputChange = (e) => {
-    setError(null);
+    // setError(null);
+    setError(true);
 
     try {
       if (e.target.files && e.target.files.length > 0) {
@@ -45,19 +46,9 @@ const FileUploadArea = (props) => {
     setUploadedFile(file);
   };
 
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
+  const handleDragEnter = (e) => {    setIsDragging(true);  };
 
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
+  const handleDragLeave = (e) => {    setIsDragging(false);  };
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -79,7 +70,6 @@ const FileUploadArea = (props) => {
       `}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
-      onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       <input
@@ -91,21 +81,10 @@ const FileUploadArea = (props) => {
         style={{ display: "none" }}
       />
 
-      {error && (
-        <div className={classes.error}>
-          {error}
-          <button onClick={() => setError(null)} className={classes.errorClose}>
-            ×
-          </button>
-        </div>
-      )}
       {isUploaded ? (
-        <div className={classes.uploadedWrapper}>
-          <div className={classes.uploaded}>{uploadedFile.name}</div>
-          <button className={classes.clear} onClick={clearFile}>
-            <img src={clear} alt="Очистить" />
-          </button>
-        </div>
+        <DoneBlock error clearAction={() => clearFile()} color="green">
+          {uploadedFile.name}
+        </DoneBlock>
       ) : (
         <button className={classes.uploadButton} onClick={handleButtonClick}>
           Загрузите файл

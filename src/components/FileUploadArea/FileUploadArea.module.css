@@ -1,24 +1,31 @@
 .uploadContainer {
-  padding: 20px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #EACDFF;
   transition: all 0.3s ease;
+  padding: 20px 0;
 }
+
 .uploadContainer.error {
-    color: red;
-    border-color: red;
+  color: var(--red);
+  border-color: var(--red);
 
 }
+
 .uploadContainer.error .uploaded {
-    background-color: #d32f2f;
+  background-color: #d32f2f;
 }
-.uploadContainer, .uploadButton, .loading, .uploaded {
-  border-radius: 8px;
 
+.uploadContainer,
+.uploadButton,
+.loading,
+.uploaded {
+  border-radius: 8px;
 }
+
 .dragover {
   background-color: #D4FAE6;
 }
@@ -28,38 +35,22 @@
 }
 
 .uploadButton {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
+  background-color: white;
+  padding: var(--btn-padding);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--small-radius);
   cursor: pointer;
   font-size: 16px;
   margin-bottom: 10px;
 }
 
-.uploadButton:hover {
-  background-color: #45a049;
+.loading {
+  background-color: var(--bright-violet);
+  border-radius: var(--small-radius);
+  padding: var(--btn-padding);
+  width: 200px;
 }
 
-.uploadedWrapper {
-    display: flex;
-    height: 30px;
-    column-gap: 4px;
-}
-.loading, .uploaded {
-    background-color: #CB81FF;
-}
- .loading {
-    width: 200px;
-}
-
-.clear {
-    background-color: black;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .error {
   color: #d32f2f;
 }

@@ -1,3 +1,13 @@
+:root {
+  --light-green: #D4FAE6;
+  --bright-green: #2AE881;
+  --small-radius: 4px;
+  --btn-padding: 10px 20px;
+  --btn-active: #C0C0C0;
+  --bright-violet: #CB81FF;
+  --red: #FF5F00;
+}
+
 body {
     
   margin: 0;

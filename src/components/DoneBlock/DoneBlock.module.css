@@ -1,0 +1,44 @@
+.uploaded {
+    border-radius: 8px;
+
+}
+
+.violet {
+    background-color: var(--bright-violet);
+
+}
+
+.green {
+    background-color: var(--light-green);
+
+}
+
+.uploaded {
+    border-radius: var(--small-radius);
+    padding: var(--btn-padding)
+}
+
+.error {
+    background-color: var(--red);
+    color: white;
+}
+
+.uploaded {
+    border-radius: 8px;
+}
+
+.clear {
+    border: none;
+    border-radius: var(--small-radius);
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.uploadedWrapper {
+    display: flex;
+    height: 30px;
+    column-gap: 4px;
+}
