@@ -2,20 +2,3 @@
     display: flex;
 column-gap: 10px;
 }
-
-button {
-    background-color: transparent;
-    border: none;
-    padding: 4px;
-    display: flex;
-    column-gap: 4px;
-    align-items: center;
-}
-
-.active {
-    border-bottom: 1px solid black;
-}
-
-img {
-    width: 18px;
-}

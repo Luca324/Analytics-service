@@ -1,0 +1,17 @@
+.btn {
+    border: none;
+    padding: 4px;
+    display: flex;
+    column-gap: 4px;
+    text-decoration: none;
+    align-items: center;
+    color: black;
+}
+
+.active {
+    border-bottom: 1px solid black;
+}
+
+img {
+    width: 18px;
+}
