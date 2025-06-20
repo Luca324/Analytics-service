@@ -1,0 +1,9 @@
+.ListItem {
+    display: flex; 
+    flex-direction: row;
+    column-gap: 4px;
+    border-radius: 16px;
+    background-color: var(--bright-violet);
+    padding: var(--btn-padding);
+    justify-content: space-between;
+}

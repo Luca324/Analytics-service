@@ -7,10 +7,21 @@ function Generator() {
   const [error, setError] = useState(false);
   const [genState, setGenState] = useState("start");
 
-  function startGenerating() {
+  async function startGenerating() {
+    const sendData = {
+      method: "GET",
+      sizу: 0.01,
+      withErrors: "off",
+      maxSpend: 1000
+    }
     setGenState("processing");
-    setError(new Error('hiiiii errorrr'))
-    setTimeout(() => setGenState("done"), 2000);
+    fetch(" http://127.0.0.1:3000/report", sendData).then(res => {
+      console.log('result', res)
+      setGenState("done")
+    }).catch(e => {
+      console.log('error', e)
+    })
+
   }
 
   function clearHandle() {
