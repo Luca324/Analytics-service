@@ -9,11 +9,11 @@ function Uploader() {
     return ( <div className={classes.Uploader}>
         <p>Загрузите csv файл и получите полную информацию о нём за сверхнизкое время</p>
         <FileUploadArea 
-        usUploaded={isUploaded}
+        isUploaded={isUploaded}
         setIsUploaded={setIsUploaded}
         uploadedFile={uploadedFile}
         setUploadedFile={setUploadedFile}
-        ></FileUploadArea>
+        />
         <button>Send</button>
     </div> );
 }

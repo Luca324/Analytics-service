@@ -2,7 +2,8 @@ import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 import clear from "../../assets/clear.svg";
 
-const FileUploadArea = ({isUploaded, setIsUploaded, uploadedFile, setUploadedFile}) => {
+const FileUploadArea = (props) => {
+  const {isUploaded, setIsUploaded, uploadedFile, setUploadedFile} = props
   const [isDragging, setIsDragging] = useState(false);
  
   const [error, setError] = useState(null);
@@ -42,7 +43,6 @@ const FileUploadArea = ({isUploaded, setIsUploaded, uploadedFile, setUploadedFil
   const processFile = (file) => {
     setIsUploaded(true);
     setUploadedFile(file);
-    console.log("Файл успешно загружен:", file.name);
   };
 
   const handleDragEnter = (e) => {
@@ -99,7 +99,6 @@ const FileUploadArea = ({isUploaded, setIsUploaded, uploadedFile, setUploadedFil
           </button>
         </div>
       )}
-<div>is uploaded: {Boolean(isUploaded)}</div>
       {isUploaded ? (
         <div className={classes.uploadedWrapper}>
           <div className={classes.uploaded}>{uploadedFile.name}</div>
