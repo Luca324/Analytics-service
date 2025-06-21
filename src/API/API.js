@@ -15,21 +15,20 @@ function aggregatedDataReader(uploadedFile) {
             return reader
 
         })
-        .catch((e) => {
-            console.log("error", e);
-        });
+        .catch(e => e)
 }
 
 function reportDataReader(params) {
     const url = `http://localhost:3000/report?${params.toString()}`;
-    
-    fetch(url, {
-      method: "GET",
+
+    return fetch(url, {
+        method: "GET",
     })
-      .then((response) => response.body)
-      .then(async (rb) => {
-        const reader = rb.getReader();
-        return reader})
+        .then((response) => response.body)
+        .then(async (rb) => {
+            const reader = rb.getReader();
+            return reader
+        }).catch(e => e)
 }
 
-export {aggregatedDataReader, reportDataReader}
+export { aggregatedDataReader, reportDataReader }

@@ -2,6 +2,7 @@ import classes from "./Generator.module.css";
 import { useState } from "react";
 import loading from "../../assets/loading.svg";
 import DoneBlock from "../../components/DoneBlock/DoneBlock";
+import { reportDataReader } from "../../API/API.js";
 const decoder = new TextDecoder();
 
 function Generator() {
@@ -9,6 +10,8 @@ function Generator() {
   const [genState, setGenState] = useState("start");
 
   async function startGenerating() {
+    try {
+      
     const sendData = {
       size: 0.001,
       withErrors: "off",
@@ -16,30 +19,31 @@ function Generator() {
     };
 
     const params = new URLSearchParams(sendData);
-const reader = reportDataReader(params)
+    const reader = await reportDataReader(params);
     setGenState("processing");
     let result = "";
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) {
-            setGenState("done");
-            break;
-          }
-          result += decoder.decode(value);
-        }
-        console.log(result);
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        setGenState("done");
+        break;
+      }
+      result += decoder.decode(value);
+    }
 
-        if (result) {
-          const blob = new Blob([result], { type: "text/csv" });
-          const a = document.createElement("a");
-          a.download = "input.csv";
-          a.href = URL.createObjectURL(blob);
-          a.style.display = "none";
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-   
+    if (result) {
+      const blob = new Blob([result], { type: "text/csv" });
+      const a = document.createElement("a");
+      a.download = "input.csv";
+      a.href = URL.createObjectURL(blob);
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    } catch (error) {
+      setError(error)
+    }
   }
   function clearHandle() {
     console.log("clearing");
