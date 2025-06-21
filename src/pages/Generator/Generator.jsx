@@ -11,38 +11,30 @@ function Generator() {
 
   async function startGenerating() {
     try {
-      
-    const sendData = {
-      size: 0.001,
-      withErrors: "off",
-      maxSpend: 1000,
-    };
+      const sendData = {
+        size: 0.001,
+        withErrors: "off",
+        maxSpend: 1000,
+      };
 
-    const params = new URLSearchParams(sendData);
-    const reader = await reportDataReader(params);
-    setGenState("processing");
-    let result = "";
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) {
-        setGenState("done");
-        break;
+      const params = new URLSearchParams(sendData);
+      const reader = await reportDataReader(params);
+      setGenState("processing");
+      let result = "";
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          setGenState("done");
+          break;
+        }
+        result += decoder.decode(value);
       }
-      result += decoder.decode(value);
-    }
 
-    if (result) {
-      const blob = new Blob([result], { type: "text/csv" });
-      const a = document.createElement("a");
-      a.download = "input.csv";
-      a.href = URL.createObjectURL(blob);
-      a.style.display = "none";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+      if (result) {
+        downloadTextAsScvFile(result);
+      }
     } catch (error) {
-      setError(error)
+      setError(error);
     }
   }
   function clearHandle() {
@@ -84,6 +76,17 @@ function Generator() {
       )}
     </div>
   );
+}
+
+function downloadTextAsScvFile(text) {
+  const blob = new Blob([result], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.download = "input.csv";
+  a.href = URL.createObjectURL(blob);
+  a.style.display = "none";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 
 export default Generator;
