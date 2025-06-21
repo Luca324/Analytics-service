@@ -1,4 +1,5 @@
 import DoneBlock from "../UI/DoneBlock/DoneBlock";
+import Loading from "../UI/Loading/Loading";
 import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 
@@ -15,12 +16,10 @@ const FileUploadArea = (props) => {
   };
 
   const handleFileInputChange = (e) => {
-    setUploaderState('start')
     processFile(e.target);
   };
 
   const processFile = (target) => {
-    setUploaderState('processing')
     try {
       if (target.files && target.files.length > 0) {
         const file = target.files[0];
@@ -68,27 +67,28 @@ const FileUploadArea = (props) => {
         className={classes.fileInput}
         style={{ display: "none" }}
       />
-
-      {uploaderState === 'uploaded' ? (
+      {uploaderState === 'uploaded' || uploaderState === 'done' || error ? (
         <DoneBlock error={error} clearAction={() => clearFile()} color="green">
           {uploadedFile.name}
         </DoneBlock>
-      ) : (
-        <button className={classes.uploadButton} onClick={handleButtonClick}>
-          Загрузите файл
-        </button>
-      )}
+      ) : ""}
       {error ? (
         <span className={classes.error}>упс, не то...</span>
+      ) : uploaderState === 'start' ? (
+        <><button className={classes.uploadButton} onClick={handleButtonClick}>
+          Загрузите файл
+        </button>
+        <span>или перетащите сюда</span></>
+      ) : uploaderState === 'processing' ? (
+        <>
+        <Loading />
+        <span>идёт парсинг файла</span>
+        </>
       ) : uploaderState === 'uploaded' ? (
         <span>файл загружен!</span>
-      ) : uploaderState === 'processing' ? (
-        <span>идёт парсинг файла</span>
-      ) : uploaderState === 'done' ? (
+      )  : uploaderState === 'done' ? (
         <span>готово!</span>
-      ) : (
-        <span>или перетащите сюда</span>
-      )}
+      ) : "" }
     </div>
   );
 };

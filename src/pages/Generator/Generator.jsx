@@ -10,6 +10,8 @@ function Generator() {
   const [genState, setGenState] = useState("start");
 
   async function startGenerating() {
+    console.log('processing')
+    setGenState("processing");
     try {
       const sendData = {
         size: 0.001,
@@ -19,7 +21,6 @@ function Generator() {
 
       const params = new URLSearchParams(sendData);
       const reader = await reportDataReader(params);
-      setGenState("processing");
       let result = "";
       while (true) {
         const { done, value } = await reader.read();
@@ -59,9 +60,7 @@ function Generator() {
         </button>
       ) : genState === "processing" ? (
         <>
-          <div className={classes.generating}>
-            <img src={loading} />
-          </div>
+          <Loading />
           <span>идёт процесс генерации</span>
         </>
       ) : genState === "done" ? (

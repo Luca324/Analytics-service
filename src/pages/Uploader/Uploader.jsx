@@ -13,8 +13,9 @@ function Uploader() {
   const [statistics, setStatictics] = useState(null);
 
   async function startAggregating() {
-    try {
-      if (uploaderState === "uploaded") {
+    if (uploaderState === "uploaded") {
+      setUploaderState("processing");
+      try {
         const reader = await aggregatedDataReader(uploadedFile);
 
         while (true) {
@@ -23,24 +24,23 @@ function Uploader() {
             break;
           }
           setStatictics(decoder.decode(value));
-          setUploaderState("done");
         }
+          setUploaderState("done");
+
+      } catch (err) {
+        console.log("error", err);
+        setError(err.message);
       }
-    } catch (err) {
-      console.log("error", err);
-      setError(err.message);
     }
   }
 
   useEffect(() => {
-if (uploaderState === 'start') {
-    setError(null);
-        setError(null);
-    setStatictics(null)
-    setUploadedFile(null);
-
-}
-  }, [uploaderState])
+    if (uploaderState === "start") {
+      setError(null);
+      setStatictics(null);
+      setUploadedFile(null);
+    }
+  }, [uploaderState]);
 
   return (
     <div className={classes.Uploader}>
