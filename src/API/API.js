@@ -4,9 +4,8 @@ function aggregatedDataReader(uploadedFile) {
 
     const formData = new FormData();
     formData.append("file", uploadedFile, "report.csv");
-    const decoder = new TextDecoder();
 
-    fetch(AGGREGATE_URL, {
+    return fetch(AGGREGATE_URL, {
         method: "POST",
         body: formData,
     })
@@ -20,3 +19,17 @@ function aggregatedDataReader(uploadedFile) {
             console.log("error", e);
         });
 }
+
+function reportDataReader(params) {
+    const url = `http://localhost:3000/report?${params.toString()}`;
+    
+    fetch(url, {
+      method: "GET",
+    })
+      .then((response) => response.body)
+      .then(async (rb) => {
+        const reader = rb.getReader();
+        return reader})
+}
+
+export {aggregatedDataReader, reportDataReader}

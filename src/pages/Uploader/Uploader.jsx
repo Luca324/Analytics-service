@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import classes from "./Uploader.module.css";
 import FileUploadArea from "../../components/FileUploadArea/FileUploadArea";
 import Statistics from "../../components/Statistics/Statistics";
-const AGGREGATE_URL = `http://localhost:3000/aggregate?rows=1000`;
+import {aggregatedDataReader} from "../../API/API.js"
+const decoder = new TextDecoder();
 
 function Uploader() {
   // const [uploaderState, setUploadedState] = useState('start')
@@ -11,21 +12,17 @@ function Uploader() {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [statistics, setStatictics] = useState(null);
 
-  function startAggregating() {
+  async function startAggregating() {
     if (isUploaded) {
-      const reader = aggregatedDataReader(uploadedFile);
+      const reader = await aggregatedDataReader(uploadedFile);
 
-      function readChunk() {
-        reader.read().then(({ done, value }) => {
-          if (done) {
-            return;
-          }
-          setStatictics(decoder.decode(value));
-
-          readChunk();
-        });
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) {
+          break;
+        }
+        setStatictics(decoder.decode(value));
       }
-      readChunk();
     }
   }
 
@@ -41,7 +38,7 @@ function Uploader() {
         uploadedFile={uploadedFile}
         setUploadedFile={setUploadedFile}
       />
-      <button className={classes.send} onClick={sendFile}>
+      <button className={classes.send} onClick={startAggregating}>
         Отправить
       </button>
       {statistics ? <Statistics stats={statistics} /> : ""}
