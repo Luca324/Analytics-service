@@ -3,10 +3,9 @@ import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 
 const FileUploadArea = (props) => {
-  const { isUploaded, setIsUploaded, uploadedFile, setUploadedFile } = props;
+  const { uploaderState, setUploaderState, uploadedFile, setUploadedFile, setStatictics, error, setError } = props;
   const [isDragging, setIsDragging] = useState(false);
 
-  const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleDrop = (e) => {
@@ -17,6 +16,7 @@ const FileUploadArea = (props) => {
 
   const handleFileInputChange = (e) => {
     setError(null);
+    setUploaderState('start')
     processFile(e.target);
   };
 
@@ -24,12 +24,12 @@ const FileUploadArea = (props) => {
     try {
       if (target.files && target.files.length > 0) {
         const file = target.files[0];
-        setIsUploaded(true);
+        setUploaderState('uploaded')
         setUploadedFile(file);
         setError(null);
       }
     } catch (err) {
-      console.log('error')
+      console.log('error', err)
       setError(err.message);
     }
   };
@@ -37,11 +37,9 @@ const FileUploadArea = (props) => {
   const handleDragEnter = (e) => {
     setIsDragging(true);
   };
-
   const handleDragLeave = (e) => {
     setIsDragging(false);
   };
-
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
@@ -49,7 +47,8 @@ const FileUploadArea = (props) => {
   const clearFile = () => {
     console.log("clearing..");
     fileInputRef.current.value = ''
-    setIsUploaded(false);
+    setUploaderState('start')
+    setStatictics(null)
     setUploadedFile(null);
   };
 
@@ -72,7 +71,7 @@ const FileUploadArea = (props) => {
         style={{ display: "none" }}
       />
 
-      {isUploaded ? (
+      {uploaderState === 'uploaded' ? (
         <DoneBlock error={error} clearAction={() => clearFile()} color="green">
           {uploadedFile.name}
         </DoneBlock>
@@ -83,8 +82,10 @@ const FileUploadArea = (props) => {
       )}
       {error ? (
         <span className={classes.error}>упс, не то...</span>
-      ) : isUploaded ? (
+      ) : uploaderState === 'uploaded' ? (
         <span>файл загружен!</span>
+      ) : uploaderState === 'done' ? (
+        <span>готово!</span>
       ) : (
         <span>или перетащите сюда</span>
       )}

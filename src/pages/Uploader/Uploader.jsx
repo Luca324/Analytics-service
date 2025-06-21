@@ -6,14 +6,15 @@ import {aggregatedDataReader} from "../../API/API.js"
 const decoder = new TextDecoder();
 
 function Uploader() {
-  // const [uploaderState, setUploadedState] = useState('start')
+  const [uploaderState, setUploaderState] = useState('start')
+  const [error, setError] = useState(null);
 
-  const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [statistics, setStatictics] = useState(null);
 
   async function startAggregating() {
-    if (isUploaded) {
+    try {
+    if (uploaderState === 'uploaded') {
       const reader = await aggregatedDataReader(uploadedFile);
 
       while (true) {
@@ -22,9 +23,15 @@ function Uploader() {
           break;
         }
         setStatictics(decoder.decode(value));
+        setUploaderState('done')
       }
+    } 
+
+  } catch (err) {
+      console.log('error', err)
+      setError(err.message);
     }
-  }
+}
 
   return (
     <div className={classes.Uploader}>
@@ -33,10 +40,13 @@ function Uploader() {
         время
       </p>
       <FileUploadArea
-        isUploaded={isUploaded}
-        setIsUploaded={setIsUploaded}
+    uploaderState={uploaderState}
+    setUploaderState={setUploaderState}
         uploadedFile={uploadedFile}
         setUploadedFile={setUploadedFile}
+        setStatictics={setStatictics}
+        error={error}
+        setError={setError}
       />
       <button className={classes.send} onClick={startAggregating}>
         Отправить
