@@ -1,4 +1,23 @@
 .navbar {
     display: flex;
-column-gap: 10px;
+    column-gap: 10px;
+}
+
+.btn {
+    padding: 0;
+    color: black;
+    border: none;
+    display: flex;
+    column-gap: 4px;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.active {
+    border-bottom: 1px solid black;
+}
+
+img {
+    width: 18px;
 }

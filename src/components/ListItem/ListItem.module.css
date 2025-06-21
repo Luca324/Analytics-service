@@ -1,9 +1,16 @@
 .ListItem {
-    display: flex; 
+    display: flex;
     flex-direction: row;
     column-gap: 4px;
     border-radius: 16px;
     background-color: var(--bright-violet);
     padding: var(--btn-padding);
     justify-content: space-between;
+    width: -webkit-fill-available;
+}
+
+.filenameWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

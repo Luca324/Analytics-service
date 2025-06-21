@@ -22,3 +22,30 @@
     width: 40px;
     border-radius: var(--small-radius);
 }
+
+
+.btns {
+    display: flex;
+    column-gap: 10px;
+    
+    align-items: center;
+    justify-content: center;
+}
+
+.toGenerator {
+    padding: var(--btn-padding);
+    border-radius: var(--small-radius);
+    background-color: var(--bright-green);
+    text-decoration: none;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.clearAll {
+    padding: var(--btn-padding);
+    background-color: black;
+    color: white;
+    border-radius: var(--small-radius);
+}
