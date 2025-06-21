@@ -3,52 +3,48 @@ import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 
 const FileUploadArea = (props) => {
-  const {isUploaded, setIsUploaded, uploadedFile, setUploadedFile} = props
+  const { isUploaded, setIsUploaded, uploadedFile, setUploadedFile } = props;
   const [isDragging, setIsDragging] = useState(false);
- 
+
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Проверка файла перед обработкой
-
-
   const handleDrop = (e) => {
-    e.preventDefault();
+    console.log('drop, e', e)
     setIsDragging(false);
     setError(null);
-
-    try {
-      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        const file = e.dataTransfer.files[0];
-        processFile(file);
-      }
-    } catch (err) {
-      setError(err.message);
-    }
+    processFile(e.dataTransfer);
   };
 
   const handleFileInputChange = (e) => {
-    // setError(null);
-    setError(true);
+    console.log('FileInputChange, e', e)
+    setError(null);
+    processFile(e.target);
+  };
 
+  const processFile = (target) => {
     try {
-      if (e.target.files && e.target.files.length > 0) {
-        const file = e.target.files[0];
-        processFile(file);
+      if (target.files && target.files.length > 0) {
+        console.log('target.files && target.files.length > 0')
+        const file = target.files[0];
+        console.log('file', file)
+        setIsUploaded(true);
+        setUploadedFile(file);
+        setError(null);
       }
     } catch (err) {
+      console.log('error')
       setError(err.message);
     }
   };
 
-  const processFile = (file) => {
-    setIsUploaded(true);
-    setUploadedFile(file);
+  const handleDragEnter = (e) => {
+    setIsDragging(true);
   };
 
-  const handleDragEnter = (e) => {    setIsDragging(true);  };
-
-  const handleDragLeave = (e) => {    setIsDragging(false);  };
+  const handleDragLeave = (e) => {
+    setIsDragging(false);
+  };
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -56,6 +52,8 @@ const FileUploadArea = (props) => {
 
   const clearFile = () => {
     console.log("clearing..");
+    console.log('fileInputRef', fileInputRef)
+    fileInputRef.current.value = ''
     setIsUploaded(false);
     setUploadedFile(null);
   };
@@ -64,9 +62,7 @@ const FileUploadArea = (props) => {
     <div
       className={`${classes.uploadContainer} ${
         isDragging ? classes.dragover : ""
-      }  ${
-        error ? classes.error : ""
-      }
+      }  ${error ? classes.error : ""}
       `}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
@@ -82,7 +78,7 @@ const FileUploadArea = (props) => {
       />
 
       {isUploaded ? (
-        <DoneBlock error clearAction={() => clearFile()} color="green">
+        <DoneBlock error={error} clearAction={() => clearFile()} color="green">
           {uploadedFile.name}
         </DoneBlock>
       ) : (
@@ -90,14 +86,13 @@ const FileUploadArea = (props) => {
           Загрузите файл
         </button>
       )}
-      {error ?
-      <span className={classes.error}>упс, не то...</span>
-      :
-      isUploaded ?
-      <span>файл загружен!</span>
-      :
-      <span>или перетащите сюда</span>
-}
+      {error ? (
+        <span className={classes.error}>упс, не то...</span>
+      ) : isUploaded ? (
+        <span>файл загружен!</span>
+      ) : (
+        <span>или перетащите сюда</span>
+      )}
     </div>
   );
 };
