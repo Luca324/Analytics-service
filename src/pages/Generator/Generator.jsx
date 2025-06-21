@@ -1,7 +1,7 @@
 import classes from "./Generator.module.css";
 import { useState } from "react";
-import loading from "../../assets/loading.svg";
-import DoneBlock from "../../components/DoneBlock/DoneBlock";
+import DoneBlock from "../../components/UI/DoneBlock/DoneBlock";
+import Loading from "../../components/UI/Loading/Loading.jsx";
 import { reportDataReader } from "../../API/API.js";
 const decoder = new TextDecoder();
 

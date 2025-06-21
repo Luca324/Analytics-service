@@ -1,4 +1,4 @@
-import fileIcon from "../../assets/fileIcon.svg";
+import fileIcon from "../../../assets/fileIcon.svg";
 import classes from "./ListItem.module.css";
 import Status from "../Status/Status";
 

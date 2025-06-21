@@ -1,5 +1,5 @@
 import classes from "./DoneBlock.module.css";
-import clear from "../../assets/clear.svg";
+import clear from "../../../assets/clear.svg";
 
 function DoneBlock({ children, error, clearAction, color }) {
   return (

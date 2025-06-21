@@ -1,8 +1,8 @@
 import classes from './Status.module.css'
-import happySmileActive from '../../assets/happySmileActive.svg'
-import happySmileUnactive from '../../assets/happySmileUnactive.svg'
-import sadSmileActive from '../../assets/sadSmileActive.svg'
-import sadSmileUnactive from '../../assets/sadSmileUnactive.svg'
+import happySmileActive from '../../../assets/happySmileActive.svg'
+import happySmileUnactive from '../../../assets/happySmileUnactive.svg'
+import sadSmileActive from '../../../assets/sadSmileActive.svg'
+import sadSmileUnactive from '../../../assets/sadSmileUnactive.svg'
 
 function Status({status}) {
     return ( <div className={classes.Status}>

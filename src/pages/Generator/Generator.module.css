@@ -18,15 +18,3 @@
 .start:active {
     background-color: var(--btn-active);
 }
-
-.generating {
-     background-color: var(--bright-violet);
-  border-radius: var(--small-radius);
-  width: 200px;
-  height: 35px;
-  text-align: center;
-}
-
-.generating img {
-    height: 100%;
-}

@@ -1,4 +1,4 @@
-import DoneBlock from "../DoneBlock/DoneBlock";
+import DoneBlock from "../UI/DoneBlock/DoneBlock";
 import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 
@@ -15,12 +15,12 @@ const FileUploadArea = (props) => {
   };
 
   const handleFileInputChange = (e) => {
-    setError(null);
     setUploaderState('start')
     processFile(e.target);
   };
 
   const processFile = (target) => {
+    setUploaderState('processing')
     try {
       if (target.files && target.files.length > 0) {
         const file = target.files[0];
@@ -48,8 +48,6 @@ const FileUploadArea = (props) => {
     console.log("clearing..");
     fileInputRef.current.value = ''
     setUploaderState('start')
-    setStatictics(null)
-    setUploadedFile(null);
   };
 
   return (
@@ -84,6 +82,8 @@ const FileUploadArea = (props) => {
         <span className={classes.error}>упс, не то...</span>
       ) : uploaderState === 'uploaded' ? (
         <span>файл загружен!</span>
+      ) : uploaderState === 'processing' ? (
+        <span>идёт парсинг файла</span>
       ) : uploaderState === 'done' ? (
         <span>готово!</span>
       ) : (

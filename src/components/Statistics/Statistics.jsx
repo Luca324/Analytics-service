@@ -1,5 +1,5 @@
 import classes from './Statistics.module.css'
-import StatsItem from "../StatsItem/StatsItem";
+import StatsItem from "../UI/StatsItem/StatsItem";
 
 function Statistics({stats}) {
     stats = JSON.parse(stats)

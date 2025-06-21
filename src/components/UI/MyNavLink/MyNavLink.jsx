@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useTabStore } from "../../store";
+import { useTabStore } from "../../../store";
 
 function MyNavLink({ tabName, children, linkClassName, ...props }) {
       const { activeTab, setActiveTab } = useTabStore();

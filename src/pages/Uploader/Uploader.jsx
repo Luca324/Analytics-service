@@ -2,11 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import classes from "./Uploader.module.css";
 import FileUploadArea from "../../components/FileUploadArea/FileUploadArea";
 import Statistics from "../../components/Statistics/Statistics";
-import {aggregatedDataReader} from "../../API/API.js"
+import { aggregatedDataReader } from "../../API/API.js";
 const decoder = new TextDecoder();
 
 function Uploader() {
-  const [uploaderState, setUploaderState] = useState('start')
+  const [uploaderState, setUploaderState] = useState("start");
   const [error, setError] = useState(null);
 
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -14,24 +14,33 @@ function Uploader() {
 
   async function startAggregating() {
     try {
-    if (uploaderState === 'uploaded') {
-      const reader = await aggregatedDataReader(uploadedFile);
+      if (uploaderState === "uploaded") {
+        const reader = await aggregatedDataReader(uploadedFile);
 
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          break;
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) {
+            break;
+          }
+          setStatictics(decoder.decode(value));
+          setUploaderState("done");
         }
-        setStatictics(decoder.decode(value));
-        setUploaderState('done')
       }
-    } 
-
-  } catch (err) {
-      console.log('error', err)
+    } catch (err) {
+      console.log("error", err);
       setError(err.message);
     }
+  }
+
+  useEffect(() => {
+if (uploaderState === 'start') {
+    setError(null);
+        setError(null);
+    setStatictics(null)
+    setUploadedFile(null);
+
 }
+  }, [uploaderState])
 
   return (
     <div className={classes.Uploader}>
@@ -40,8 +49,8 @@ function Uploader() {
         время
       </p>
       <FileUploadArea
-    uploaderState={uploaderState}
-    setUploaderState={setUploaderState}
+        uploaderState={uploaderState}
+        setUploaderState={setUploaderState}
         uploadedFile={uploadedFile}
         setUploadedFile={setUploadedFile}
         setStatictics={setStatictics}
