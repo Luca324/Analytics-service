@@ -8,7 +8,6 @@ function Generator() {
   const [genState, setGenState] = useState("start");
 
   async function startGenerating() {
-    let csvData = ''
     const sendData = {
       size: 0.001,
       withErrors: "off",
@@ -18,57 +17,53 @@ function Generator() {
     const params = new URLSearchParams(sendData);
     const url = `http://localhost:3000/report?${params.toString()}`;
 
-    // setGenState("processing");
+    setGenState("processing");
 
-  fetch(url, {
+    fetch(url, {
       method: "GET",
     })
-  .then((response) => response.body)
-  .then((rb) => {
-    const reader = rb.getReader();
+      .then((response) => response.body)
+      .then((rb) => {
+        const reader = rb.getReader();
 
-    return new ReadableStream({
-      start(controller) {
-        // The following function handles each data chunk
-        function push() {
-          // "done" is a Boolean and value a "Uint8Array"
-          reader.read().then(({ done, value }) => {
-            // If there is no more data to read
-            if (done) {
-              console.log("done", done);
-              controller.close();
-              return;
+        return new ReadableStream({
+          start(controller) {
+            // The following function handles each data chunk
+            function push() {
+              // "done" is a Boolean and value a "Uint8Array"
+              reader.read().then(({ done, value }) => {
+                // If there is no more data to read
+                if (done) {
+                  setGenState("done");
+                  controller.close();
+                  return;
+                }
+                // Get the data and send it to the browser via the controller
+                controller.enqueue(value);
+                push();
+              });
             }
-            csvData+=value
-            // Get the data and send it to the browser via the controller
-            controller.enqueue(value);
-            // Check chunks by logging to the console
             push();
-          });
-        }
-console.log('csvData', csvData)
-        const blob = new Blob([csvData], { type: 'text/csv' });
-        const a = document.createElement('a');
-  a.download = 'input.csv';
-  a.href = URL.createObjectURL(blob);
-  a.dataset.downloadurl = ['text/csv', a.download, a.href].join(':');
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-        push();
-      },
-    });
-  })
-  .then((stream) =>
-    // Respond with our stream
-    new Response(stream, { headers: { "Content-Type": "text/html" } }).text(),
-  )
-  .then((result) => {
-    // Do things with result
-    console.log(result);
-  });
-
+          },
+        });
+      })
+      .then((stream) =>
+        // Respond with our stream
+        new Response(stream, {
+          headers: { "Content-Type": "text/html" },
+        }).text()
+      )
+      .then((result) => {
+        const blob = new Blob([result], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.download = "input.csv";
+        a.href = URL.createObjectURL(blob);
+        a.dataset.downloadurl = ["text/csv", a.download, a.href].join(":");
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
   }
   function clearHandle() {
     console.log("clearing");
