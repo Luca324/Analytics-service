@@ -10,14 +10,12 @@ const FileUploadArea = (props) => {
   const fileInputRef = useRef(null);
 
   const handleDrop = (e) => {
-    console.log('drop, e', e)
     setIsDragging(false);
     setError(null);
     processFile(e.dataTransfer);
   };
 
   const handleFileInputChange = (e) => {
-    console.log('FileInputChange, e', e)
     setError(null);
     processFile(e.target);
   };
@@ -25,9 +23,7 @@ const FileUploadArea = (props) => {
   const processFile = (target) => {
     try {
       if (target.files && target.files.length > 0) {
-        console.log('target.files && target.files.length > 0')
         const file = target.files[0];
-        console.log('file', file)
         setIsUploaded(true);
         setUploadedFile(file);
         setError(null);
@@ -52,7 +48,6 @@ const FileUploadArea = (props) => {
 
   const clearFile = () => {
     console.log("clearing..");
-    console.log('fileInputRef', fileInputRef)
     fileInputRef.current.value = ''
     setIsUploaded(false);
     setUploadedFile(null);

@@ -5,41 +5,27 @@ import Statistics from "../../components/Statistics/Statistics";
 const AGGREGATE_URL = `http://localhost:3000/aggregate?rows=1000`;
 
 function Uploader() {
+  // const [uploaderState, setUploadedState] = useState('start')
+
   const [isUploaded, setIsUploaded] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [statistics, setStatictics] = useState(null)
+  const [statistics, setStatictics] = useState(null);
 
-  function sendFile() {
+  function startAggregating() {
     if (isUploaded) {
-      const formData = new FormData();
-      formData.append("file", uploadedFile, "report.csv");
-      console.log(formData.get("file"));
-      const decoder = new TextDecoder();
+      const reader = aggregatedDataReader(uploadedFile);
 
-      fetch(AGGREGATE_URL, {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.body)
-        .then((rb) => {
-          const reader = rb.getReader();
-
-          function readChunk() {
-            reader.read().then(({ done, value }) => {
-              if (done) {
-                console.log("DONE");
-                return;
-              }
-              setStatictics(decoder.decode(value))
-
-              readChunk();
-            });
+      function readChunk() {
+        reader.read().then(({ done, value }) => {
+          if (done) {
+            return;
           }
+          setStatictics(decoder.decode(value));
+
           readChunk();
-        })
-        .catch((e) => {
-          console.log("error", e);
         });
+      }
+      readChunk();
     }
   }
 
@@ -58,11 +44,7 @@ function Uploader() {
       <button className={classes.send} onClick={sendFile}>
         Отправить
       </button>
-      { statistics ? <Statistics stats={statistics} /> 
-      : ""
-
-      }<>
-      </>
+      {statistics ? <Statistics stats={statistics} /> : ""}
     </div>
   );
 }
