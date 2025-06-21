@@ -25,7 +25,7 @@ function Generator() {
       .then((response) => response.body)
       .then((rb) => {
         const reader = rb.getReader();
-
+// TODO переписать без стрима
         return new ReadableStream({
           start(controller) {
             // The following function handles each data chunk
@@ -63,7 +63,9 @@ function Generator() {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-      });
+      }).catch(e => {
+    setError(e);
+      })
   }
   function clearHandle() {
     console.log("clearing");

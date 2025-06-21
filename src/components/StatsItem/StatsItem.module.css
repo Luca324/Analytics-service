@@ -1,0 +1,13 @@
+.StatsItem {
+    display: flex;
+    flex-direction: column;
+    column-gap: 5px;
+    background-color: white;
+    border-radius: var(--big-radius);
+    text-align: center;
+    justify-content: center;
+}
+
+.data {
+    font-size: 30px;
+}

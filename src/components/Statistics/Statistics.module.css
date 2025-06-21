@@ -1,0 +1,18 @@
+:root {
+    --child-height: 50px;
+    --gap: 4px;
+}
+
+.Statistics {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: var(--gap);
+    width: 100%;
+}
+
+.Statistics > * {
+    width: 45%;
+    padding: var(--btn-padding)
+}
