@@ -78,7 +78,7 @@ function Generator() {
 }
 
 function downloadTextAsScvFile(text) {
-  const blob = new Blob([result], { type: "text/csv" });
+  const blob = new Blob([text], { type: "text/csv" });
   const a = document.createElement("a");
   a.download = "input.csv";
   a.href = URL.createObjectURL(blob);
