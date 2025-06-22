@@ -1,12 +1,31 @@
-# React + Vite
+# Analytics-service
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Инструкция по запуску
 
-Currently, two official plugins are available:
+### Запуск бэкенда
+```bash
+npm run start
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Запуск фронтенда
+```bash
+npm install   # установка зависимостей
+npm run dev   # запуск разработческого сервера
+```
 
-## Expanding the ESLint configuration
+## Архитектура проекта
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Компоненты
+- Страницы: `/pages` (основные страницы приложения)
+- UI-компоненты: `/components/UI` (переиспользуемые компоненты: кнопки, ссылки и т.д.)
+- Остальные компоненты: `/components`
+
+### Слои приложения
+1. **API слой**: `API.js` - взаимодействие с бэкендом
+2. **Слой данных**: `store/index.js` - управление состоянием через Zustand
+3. **UI слой**: напрямую взаимодействует с API и хранилищем
+
+### Особенности
+- Все хранилища Zustand находятся в одном файле из-за их небольшого размера
+- Отсутствует отдельный слой бизнес-логики ввиду простоты сервиса
+```
