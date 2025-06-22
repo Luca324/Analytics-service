@@ -5,25 +5,26 @@
   align-items: center;
   justify-content: center;
   background-color: #EACDFF;
+  border-radius: var(--big-radius);
   transition: all 0.3s ease;
   padding: 20px 0;
 }
 
 .uploadContainer.error {
   color: var(--red);
-  border-color: var(--red);
-
+  border: 1px var(--red) solid;
+  background-color: transparent;
 }
 
-.uploadContainer.error .uploaded {
-  background-color: #d32f2f;
+
+.uploadContainer.uploaded {
+  background-color: transparent;
+  border: 1px black solid;
 }
 
-.uploadContainer,
 .uploadButton,
-.loading,
-.uploaded {
-  border-radius: 8px;
+.loading {
+  border-radius: var(--small-radius);
 }
 
 .dragover {

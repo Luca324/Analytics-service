@@ -10,6 +10,8 @@ const FileUploadArea = (props) => {
   const fileInputRef = useRef(null);
 
   const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation(); // Добавлено для надежности
     setIsDragging(false);
     setError(null);
     processFile(e.dataTransfer);
@@ -28,23 +30,30 @@ const FileUploadArea = (props) => {
         setError(null);
       }
     } catch (err) {
-      console.log('error', err)
+      console.error('error', err)
       setError(err.message);
     }
   };
 
   const handleDragEnter = (e) => {
+    e.preventDefault();
     setIsDragging(true);
   };
+
   const handleDragLeave = (e) => {
+    e.preventDefault();
     setIsDragging(false);
   };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
   const clearFile = () => {
-    console.log("clearing..");
     fileInputRef.current.value = ''
     setUploaderState('start')
   };
@@ -57,6 +66,7 @@ const FileUploadArea = (props) => {
       `}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
       <input

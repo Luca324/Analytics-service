@@ -6,6 +6,7 @@
   --btn-padding: 10px 20px;
   --btn-active: #C0C0C0;
   --bright-violet: #CB81FF;
+  --light-violet: #FCE2FF;
   --red: #FF5F00;
 }
 
@@ -14,6 +15,6 @@ body {
   margin: 0;
   padding: 0;
   
-  background-color: #FCE2FF;
+  background-color: var(--light-violet);
   font-family: Arial, sans-serif;
 }

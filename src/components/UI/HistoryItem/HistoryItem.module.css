@@ -1,4 +1,5 @@
-.ListItem {
+.HistoryItem {
+    border: none;
     display: flex;
     flex-direction: row;
     column-gap: 4px;
@@ -14,4 +15,14 @@
     justify-content: center;
     align-items: center;
     column-gap: 4px;
+}
+
+.statsWrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+}
+
+.StatsItem {
+  background-color: var(--light-violet);
 }

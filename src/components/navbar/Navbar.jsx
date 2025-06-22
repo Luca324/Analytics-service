@@ -9,7 +9,7 @@ function Navbar() {
     const { activeTab, setActiveTab } = useTabStore();
 
   return (
-    <div className={classes.navbar}>
+    <div className={classes.Navbar}>
       <MyNavLink tabName="uploader"
       linkClassName={`${classes.btn} ${activeTab === "uploader" ? classes.active : ""}`}
       >

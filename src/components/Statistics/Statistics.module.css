@@ -14,5 +14,8 @@
 
 .Statistics > * {
     width: 45%;
-    padding: var(--btn-padding)
+}
+
+.StatsItem {
+    background-color: white;
 }

@@ -10,7 +10,6 @@ function Generator() {
   const [genState, setGenState] = useState("start");
 
   async function startGenerating() {
-    console.log('processing')
     setGenState("processing");
     try {
       const sendData = {
@@ -39,7 +38,6 @@ function Generator() {
     }
   }
   function clearHandle() {
-    console.log("clearing");
     setGenState("start");
     setError(false);
   }

@@ -31,31 +31,4 @@ function reportDataReader(params) {
         }).catch(e => e)
 }
 
-function saveStatistics(status = "fail", fileName = "NoName", stats = {}) {
-    const id = Date.now()
-
-    let history = getHistory()
-
-    if (status === "success") {
-        history[id] = { fileName, status, stats }
-    } else {
-        history[id] = { fileName, status }
-    }
-    localStorage.setItem('history', JSON.stringify(history))
-    console.log(localStorage.getItem('history'))
-
-}
-
-function getHistory() {
-    let history = localStorage.getItem('history')
-    if (!history) history = {}
-    else history = JSON.parse(history)
-    return history
-}
-
-function clearHistory() {
-    console.log('clearing history')
-    localStorage.setItem('history', '{}')
-}
-
-export { aggregatedDataReader, reportDataReader, saveStatistics, getHistory, clearHistory }
+export { aggregatedDataReader, reportDataReader }

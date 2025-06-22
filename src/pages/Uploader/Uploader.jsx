@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import classes from "./Uploader.module.css";
 import FileUploadArea from "../../components/FileUploadArea/FileUploadArea";
 import Statistics from "../../components/Statistics/Statistics";
-import { aggregatedDataReader, saveStatistics } from "../../API/API.js";
+import { aggregatedDataReader } from "../../API/API.js";
 import { useHistoryStore } from "../../store/index.js";
 
 const decoder = new TextDecoder();
@@ -16,19 +16,18 @@ function Uploader() {
   const [statistics, setStatistics] = useState(null);
 
   async function startAggregating() {
-    console.log("aggregating...");
     if (uploaderState === "uploaded" || uploaderState === "done") {
       setUploaderState("processing");
       try {
         const reader = await aggregatedDataReader(uploadedFile);
-let finalStats = null
+        let finalStats = null;
         while (true) {
           const { done, value } = await reader.read();
           if (done) {
             break;
           }
           const stats = decoder.decode(value);
-          finalStats = stats
+          finalStats = stats;
           setStatistics(JSON.parse(stats));
         }
         setUploaderState("done");
@@ -38,7 +37,6 @@ let finalStats = null
           fileName: uploadedFile.name,
           stats: finalStats,
         });
-        
       } catch (err) {
         console.error(err);
         setError(err.message);
@@ -66,8 +64,7 @@ let finalStats = null
   return (
     <div className={classes.Uploader}>
       <p>
-        Загрузите csv файл и получите полную информацию о нём за сверхнизкое
-        время
+        Загрузите csv файл и получите полную информацию о нём за сверхнизкое время
       </p>
       <FileUploadArea
         uploaderState={uploaderState}
