@@ -16,6 +16,14 @@
     border: none;
 }
 
-.send:active {
+.send:disabled {
     background-color: var(--btn-active);
+}
+
+.highlightsStub {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--bright-violet);
+    height: 300px;
 }

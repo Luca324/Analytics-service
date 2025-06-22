@@ -2,7 +2,6 @@ import classes from './Statistics.module.css'
 import StatsItem from "../UI/StatsItem/StatsItem";
 
 function Statistics({stats}) {
-    stats = JSON.parse(stats)
     const keys = Object.keys(stats)
 
 return ( <div className={classes.Statistics}>

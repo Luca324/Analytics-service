@@ -4,7 +4,7 @@ import classes from "./FileUploadArea.module.css";
 import { useState, useRef } from "react";
 
 const FileUploadArea = (props) => {
-  const { uploaderState, setUploaderState, uploadedFile, setUploadedFile, setStatictics, error, setError } = props;
+  const { uploaderState, setUploaderState, uploadedFile, setUploadedFile, error, setError } = props;
   const [isDragging, setIsDragging] = useState(false);
 
   const fileInputRef = useRef(null);
