@@ -70,6 +70,7 @@ const FileUploadArea = (props) => {
       onDrop={handleDrop}
     >
       <input
+      data-testid="input-file"
         type="file"
         accept=".csv"
         ref={fileInputRef}
@@ -78,7 +79,7 @@ const FileUploadArea = (props) => {
         style={{ display: "none" }}
       />
       {uploaderState === 'uploaded' || uploaderState === 'done' || error ? (
-        <DoneBlock error={error} clearAction={() => clearFile()} color="green">
+        <DoneBlock data-testid="uploaded-file" error={error} clearAction={() => clearFile()} color="green">
           {uploadedFile.name}
         </DoneBlock>
       ) : ""}
@@ -91,7 +92,7 @@ const FileUploadArea = (props) => {
         <span>или перетащите сюда</span></>
       ) : uploaderState === 'processing' ? (
         <>
-        <Loading />
+        <Loading data-testid="loading"/>
         <span>идёт парсинг файла</span>
         </>
       ) : uploaderState === 'uploaded' ? (
