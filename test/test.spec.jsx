@@ -4,23 +4,25 @@ import events from "@testing-library/user-event"
 import { fetchReportData, downloadTextAsScvFile } from "../src/services/generatorService"
 import { aggregatedDataReader } from "../src/API/API"
 import { useHistoryStore } from "../src/store/HistoryStore.js"
-import Generator from "../src/pages/Generator/Generator"
-import Uploader from "../src/pages/Uploader/Uploader"
 import { input } from "@testing-library/user-event/dist/cjs/event/input.js"
-
+ vi.mock("../src/API/API.js", () => ({
+    aggregatedDataReader: vi.fn(),
+  }))
 // Мокаем хранилище
 vi.mock("../src/store/index.js", () => ({
   useHistoryStore: vi.fn(),
 }))
-
+vi.mock("../src/services/generatorService", {
+    fetchReportData: vi.fn(),
+    downloadTextAsScvFile: vi.fn(),
+  })
+import Generator from "../src/pages/Generator/Generator"
+import Uploader from "../src/pages/Uploader/Uploader"
 // Автоматическая очистка после каждого теста
 afterEach(cleanup)
 
 describe("Generator", () => {
-  vi.mock("../src/services/generatorService", {
-    fetchReportData: vi.fn(),
-    downloadTextAsScvFile: vi.fn(),
-  })
+  
 
   test("при рендеринге кнопка в начальном состоянии", () => {
     // arrange
@@ -65,18 +67,8 @@ describe("Generator", () => {
 })
 
 describe("Analytics", () => {
-  vi.mock("../src/API/API.js", () => ({
-    aggregatedDataReader: vi.fn(),
-  }))
+ 
 
-  beforeEach(() => {
-    // Настраиваем мок хранилища
-    useHistoryStore.mockReturnValue({
-      history: {},
-      addHistoryItem: vi.fn(),
-      clearHistory: vi.fn(),
-    })
-  })
 
   test("при рендеринге интерфейс в начальном состоянии", () => {
     const { queryByText } = render(<Uploader />)
@@ -138,3 +130,4 @@ describe("Analytics", () => {
   })
 
 })
+
