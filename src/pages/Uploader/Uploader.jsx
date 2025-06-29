@@ -3,7 +3,7 @@ import classes from "./Uploader.module.css";
 import FileUploadArea from "../../components/FileUploadArea/FileUploadArea";
 import Statistics from "../../components/Statistics/Statistics";
 import { aggregatedDataReader } from "../../API/API.js";
-import { useHistoryStore } from "../../store/index.js";
+import { useHistoryStore } from "../../store/HistoryStore.js";
 
 const decoder = new TextDecoder();
 

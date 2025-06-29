@@ -3,7 +3,7 @@ import upload from "../../assets/upload.svg";
 import generator from "../../assets/generator.svg";
 import history from "../../assets/history.svg";
 import MyNavLink from "../UI/MyNavLink/MyNavLink.jsx";
-import { useTabStore } from "../../store";
+import { useTabStore } from "../../store/TabStore.js";
 
 function Navbar() {
     const { activeTab, setActiveTab } = useTabStore();

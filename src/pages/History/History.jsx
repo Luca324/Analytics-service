@@ -2,7 +2,7 @@ import HistoryItem from "../../components/UI/HistoryItem/HistoryItem";
 import classes from "./History.module.css";
 import trash from "../../assets/Trash.svg";
 import MyNavLink from "../../components/UI/MyNavLink/MyNavLink";
-import { useHistoryStore } from "../../store";
+import { useHistoryStore } from "../../store/HistoryStore";
 
 function History() {
   const { history, clearHistory, removeHistoryItem } = useHistoryStore();
