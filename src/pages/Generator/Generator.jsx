@@ -32,7 +32,7 @@ function Generator() {
   }
 
   return (
-    <div className={classes.Generator}>
+    <div className={classes.Generator} data-testid="generator-page">
       <span data-testid="label">Сгенерируйте готовый csv-файл нажатием одной кнопки</span>
       {error ? (
         <>

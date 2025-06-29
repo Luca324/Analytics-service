@@ -1,7 +1,8 @@
 import { describe, expect, test, afterEach, beforeEach, vi } from "vitest"
 import { render, screen, cleanup, waitFor } from "@testing-library/react"
 import events from "@testing-library/user-event"
-import { MemoryRouter } from "react-router-dom"
+import { MemoryRouter, BrowserRouter } from "react-router-dom"
+import Navbar from "../src/components/Navbar/Navbar"
 import { fetchReportData, downloadTextAsScvFile } from "../src/services/generatorService"
 import { aggregatedDataReader } from "../src/API/API"
 import History from "../src/pages/History/History"
@@ -20,6 +21,7 @@ const mockHistory = {
       '{"total_spend_galactic":15613050.5,"rows_affected":31200,"less_spent_at":236,"big_spent_at":266,"less_spent_value":29769,"big_spent_value":59499,"average_spend_galactic":500.41828525641023,"big_spent_civ":"monsters","less_spent_civ":"humans"}',
   },
 }
+const mockSetActiveTab = vi.fn()
 
 const mockRemoveHistoryItem = vi.fn()
 const mockClearHistory = vi.fn()
@@ -27,7 +29,6 @@ const mockClearHistory = vi.fn()
 vi.mock("../src/store/HistoryStore.js", () => ({
   useHistoryStore: vi.fn(() => ({
     history: mockHistory,
-    clearHistory: vi.fn(),
     removeHistoryItem: mockRemoveHistoryItem,
     clearHistory: mockClearHistory,
   })),
@@ -126,14 +127,14 @@ describe("Analytics", () => {
       expect(queryByTestId("loading")).not.toBeNull()
     }
 
-  test("после успешной обработки показывает статистику", async () => {
+  test("после начала обработки показывает постепенно приходящую статистику", async () => {
     const mockReader = {
       read: vi
         .fn()
         .mockResolvedValueOnce({ done: false, value: new TextEncoder().encode('{"total":100}') })
         .mockResolvedValue({ done: true }),
     }
-    aggregatedDataReader.mockResolvedValue(mockReader)
+    aggregatedDataReader.mockResolvedValueOnce(mockReader)
 
     const { getByTestId, getByText, queryByText } = render(<Uploader />)
 
@@ -200,10 +201,76 @@ describe("History", () => {
         <History />
       </MemoryRouter>
     )
-    
-    await events.click(getByText('Очистить всё'));
-    expect(mockClearHistory).toHaveBeenCalled();
-  });
 
-   
+    await events.click(getByText("Очистить всё"))
+    expect(mockClearHistory).toHaveBeenCalled()
+  })
 })
+
+// describe("Navbar Navigation", () => {
+//   beforeEach(() => {
+//     vi.mock("../src/store/TabStore.js", () => ({
+//       useTabStore: vi.fn(() => ({
+//         activeTab: "uploader",
+//         setActiveTab: mockSetActiveTab,
+//       })),
+//     }))
+//   })
+
+//   afterEach(() => {
+//     vi.clearAllMocks()
+//   })
+
+//   test("отображает все навигационные ссылки", () => {
+//     const { getByText } = render(
+//       <BrowserRouter>
+//         <Navbar />
+//       </BrowserRouter>
+//     )
+
+//     expect(getByText("CSV Аналитик")).not.toBeNull()
+//     expect(getByText("CSV Генератор")).not.toBeNull()
+//     expect(getByText("История")).not.toBeNull()
+//   })
+
+//   test("подсвечивает активную вкладку", () => {
+//     vi.mock("../src/store/TabStore.js", () => ({
+//       useTabStore: vi.fn(() => ({
+//         activeTab: "generator",
+//         setActiveTab: mockSetActiveTab,
+//       })),
+//     }))
+
+//     const { getByText } = render(
+//       <BrowserRouter>
+//         <Navbar />
+//       </BrowserRouter>
+//     )
+
+//     const generatorTab = getByText("CSV Генератор").closest("a")
+//     expect(generatorTab).toHaveClass("active")
+//   })
+
+//   test("вызывает setActiveTab при клике на вкладку", async () => {
+//     const { getByText } = render(
+//       <BrowserRouter>
+//         <Navbar />
+//       </BrowserRouter>
+//     )
+
+//     await events.click(getByText("История"))
+//     expect(mockSetActiveTab).toHaveBeenCalledWith("history")
+//   })
+
+//   test("содержит корректные ссылки для навигации", () => {
+//     const { getByText } = render(
+//       <BrowserRouter>
+//         <Navbar />
+//       </BrowserRouter>
+//     )
+
+//     expect(getByText("CSV Аналитик").closest("a")).toHaveAttribute("href", "/uploader")
+//     expect(getByText("CSV Генератор").closest("a")).toHaveAttribute("href", "/generator")
+//     expect(getByText("История").closest("a")).toHaveAttribute("href", "/history")
+//   })
+// })

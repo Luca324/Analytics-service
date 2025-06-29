@@ -10,7 +10,6 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
         <Header />
         <Routes>
           <Route path="/" element={<Uploader />} />
@@ -18,7 +17,6 @@ function App() {
           <Route path="/generator" element={<Generator />} />
           <Route path="/history" element={<History />} />
         </Routes>
-      </BrowserRouter>
     </div>
   );
 }

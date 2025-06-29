@@ -62,7 +62,7 @@ function Uploader() {
   }, [error]);
 
   return (
-    <div className={classes.Uploader}>
+    <div className={classes.Uploader} data-testid="uploader-page">
       <p>
         Загрузите csv файл и получите полную информацию о нём за сверхнизкое время
       </p>

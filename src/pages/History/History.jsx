@@ -19,7 +19,7 @@ function History() {
 
   return (
     <>
-      <div className={classes.History}>
+      <div className={classes.History} data-testid="history-page">
         {historyData.map((item) => {
           const [key, value] = item;
           return (
