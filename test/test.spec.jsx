@@ -3,27 +3,31 @@ import { render, screen, cleanup, waitFor } from "@testing-library/react"
 import events from "@testing-library/user-event"
 import { fetchReportData, downloadTextAsScvFile } from "../src/services/generatorService"
 import { aggregatedDataReader } from "../src/API/API"
-import { useHistoryStore } from "../src/store/HistoryStore.js"
+import History from "../src/pages/History/History"
+import Generator from "../src/pages/Generator/Generator"
+import Uploader from "../src/pages/Uploader/Uploader"
 import { input } from "@testing-library/user-event/dist/cjs/event/input.js"
- vi.mock("../src/API/API.js", () => ({
-    aggregatedDataReader: vi.fn(),
-  }))
+vi.mock("../src/API/API.js", () => ({
+  aggregatedDataReader: vi.fn(),
+}))
 // Мокаем хранилище
+// vi.mock("../src/store/HistoryStore.js", () => ({
+//   useHistoryStore: vi.fn(),
+// }))
 vi.mock("../src/store/index.js", () => ({
   useHistoryStore: vi.fn(),
 }))
+vi.mock("../src/store/TabStore.js", () => ({
+  useTabStore: vi.fn(),
+}))
 vi.mock("../src/services/generatorService", {
-    fetchReportData: vi.fn(),
-    downloadTextAsScvFile: vi.fn(),
-  })
-import Generator from "../src/pages/Generator/Generator"
-import Uploader from "../src/pages/Uploader/Uploader"
+  fetchReportData: vi.fn(),
+  downloadTextAsScvFile: vi.fn(),
+})
 // Автоматическая очистка после каждого теста
 afterEach(cleanup)
 
 describe("Generator", () => {
-  
-
   test("при рендеринге кнопка в начальном состоянии", () => {
     // arrange
     const { getByTestId } = render(<Generator />)
@@ -67,9 +71,6 @@ describe("Generator", () => {
 })
 
 describe("Analytics", () => {
- 
-
-
   test("при рендеринге интерфейс в начальном состоянии", () => {
     const { queryByText } = render(<Uploader />)
 
@@ -105,7 +106,7 @@ describe("Analytics", () => {
       expect(queryByTestId("loading")).not.toBeNull()
     }
 
-    test("после успешной обработки показывает статистику", async () => {
+  test("после успешной обработки показывает статистику", async () => {
     const mockReader = {
       read: vi
         .fn()
@@ -128,6 +129,31 @@ describe("Analytics", () => {
       expect(queryByText("total")).toBeNull()
     })
   })
-
 })
 
+// describe("History", () => {
+//   const mockHistory = {
+//     'id1': { status: 'success', fileName: 'report1.csv', stats: {} },
+//     'id2': { status: 'fail', fileName: 'report2.csv' }
+//   };
+
+//   const mockClearHistory = vi.fn();
+//   const mockRemoveHistoryItem = vi.fn();
+
+//   beforeEach(() => {
+//     useHistoryStore.mockReturnValue({
+//       history: mockHistory,
+//       clearHistory: mockClearHistory,
+//       removeHistoryItem: mockRemoveHistoryItem
+//     });
+//   });
+
+//   afterEach(() => {
+//     vi.clearAllMocks()
+//   })
+
+//   test("отображает все элементы истории", () => {
+//     render(<History />)
+
+//   })
+// })
