@@ -13,5 +13,7 @@ export default defineConfig({
         },
       }),
   ],
+  test: {
+    environment: "jsdom",
+  },
 })
-// vite.config.js

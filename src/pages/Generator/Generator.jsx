@@ -53,7 +53,7 @@ function Generator() {
           <span className={classes.error}>упс, не то...</span>
         </>
       ) : genState === "start" ? (
-        <button className={classes.start} onClick={() => startGenerating()}>
+        <button data-testid="start-gen-btn" className={classes.start} onClick={() => startGenerating()}>
           Начать генерацию
         </button>
       ) : genState === "processing" ? (
