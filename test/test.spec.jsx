@@ -1,6 +1,7 @@
 import { describe, expect, test, afterEach, beforeEach, vi } from "vitest"
 import { render, screen, cleanup, waitFor } from "@testing-library/react"
 import events from "@testing-library/user-event"
+import { MemoryRouter } from "react-router-dom"
 import { fetchReportData, downloadTextAsScvFile } from "../src/services/generatorService"
 import { aggregatedDataReader } from "../src/API/API"
 import History from "../src/pages/History/History"
@@ -10,16 +11,35 @@ import { input } from "@testing-library/user-event/dist/cjs/event/input.js"
 vi.mock("../src/API/API.js", () => ({
   aggregatedDataReader: vi.fn(),
 }))
+
+const mockHistory = {
+  1750601398945: {
+    status: "success",
+    fileName: "report1.csv",
+    stats:
+      '{"total_spend_galactic":15613050.5,"rows_affected":31200,"less_spent_at":236,"big_spent_at":266,"less_spent_value":29769,"big_spent_value":59499,"average_spend_galactic":500.41828525641023,"big_spent_civ":"monsters","less_spent_civ":"humans"}',
+  },
+}
+
+const mockRemoveHistoryItem = vi.fn()
+const mockClearHistory = vi.fn()
 // Мокаем хранилище
-// vi.mock("../src/store/HistoryStore.js", () => ({
-//   useHistoryStore: vi.fn(),
-// }))
-vi.mock("../src/store/index.js", () => ({
-  useHistoryStore: vi.fn(),
+vi.mock("../src/store/HistoryStore.js", () => ({
+  useHistoryStore: vi.fn(() => ({
+    history: mockHistory,
+    clearHistory: vi.fn(),
+    removeHistoryItem: mockRemoveHistoryItem,
+    clearHistory: mockClearHistory,
+  })),
 }))
+
 vi.mock("../src/store/TabStore.js", () => ({
-  useTabStore: vi.fn(),
+  useTabStore: vi.fn(() => ({
+    activeTab: "uploader",
+    setActiveTab: vi.fn(),
+  })),
 }))
+
 vi.mock("../src/services/generatorService", {
   fetchReportData: vi.fn(),
   downloadTextAsScvFile: vi.fn(),
@@ -123,37 +143,67 @@ describe("Analytics", () => {
 
     await events.click(getByText("Отправить"))
 
-    screen.logTestingPlaygroundURL()
-
     await waitFor(() => {
       expect(queryByText("total")).toBeNull()
     })
   })
 })
 
-// describe("History", () => {
-//   const mockHistory = {
-//     'id1': { status: 'success', fileName: 'report1.csv', stats: {} },
-//     'id2': { status: 'fail', fileName: 'report2.csv' }
-//   };
+describe("History", () => {
+  beforeEach(() => {
+    // Мокаем useHistoryStore с чистым состоянием перед каждым тестом
+    vi.mock("../src/store/HistoryStore", () => ({
+      useHistoryStore: vi.fn(() => ({
+        history: mockHistory,
+        clearHistory: mockClearHistory,
+        removeHistoryItem: mockRemoveHistoryItem,
+      })),
+    }))
+  })
 
-//   const mockClearHistory = vi.fn();
-//   const mockRemoveHistoryItem = vi.fn();
+  afterEach(() => {
+    vi.clearAllMocks() // Очищаем моки после каждого теста
+  })
+  test("отображает все элементы истории", () => {
+    const { queryByText } = render(
+      <MemoryRouter>
+        <History />
+      </MemoryRouter>
+    )
+    expect(queryByText("report1.csv")).not.toBeNull()
+  })
+  test("отображает кнопки управления", () => {
+    const { queryByText } = render(
+      <MemoryRouter>
+        <History />
+      </MemoryRouter>
+    )
+    expect(queryByText("Сгенерировать больше")).not.toBeNull()
+    expect(queryByText("Очистить всё")).not.toBeNull()
+  })
 
-//   beforeEach(() => {
-//     useHistoryStore.mockReturnValue({
-//       history: mockHistory,
-//       clearHistory: mockClearHistory,
-//       removeHistoryItem: mockRemoveHistoryItem
-//     });
-//   });
+  test("вызывает удаление элемента при клике на корзину", async () => {
+    const { queryAllByTestId } = render(
+      <MemoryRouter>
+        <History />
+      </MemoryRouter>
+    )
+    const deleteButtons = queryAllByTestId("remove")
 
-//   afterEach(() => {
-//     vi.clearAllMocks()
-//   })
+    await events.click(deleteButtons[0])
+    expect(mockRemoveHistoryItem).toHaveBeenCalledWith("1750601398945")
+  })
 
-//   test("отображает все элементы истории", () => {
-//     render(<History />)
+  test('вызывает очистку истории при клике на "Очистить всё"', async () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <History />
+      </MemoryRouter>
+    )
+    
+    await events.click(getByText('Очистить всё'));
+    expect(mockClearHistory).toHaveBeenCalled();
+  });
 
-//   })
-// })
+   
+})

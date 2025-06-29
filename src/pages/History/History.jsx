@@ -26,6 +26,7 @@ function History() {
             <div className={classes.listRow} key={key}>
               <HistoryItem item={item} />
               <button
+              data-testid="remove"
                 className={classes.delete}
                 onClick={() => handleRemoveItem(key)}
               >
